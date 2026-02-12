@@ -63,11 +63,11 @@ void R_ConcatTransforms (float in1[3][4], float in2[3][4], float out[3][4]);
 
 void FloorDivMod (double numer, double denom, int *quotient,
 		int *rem);
-fixed16_t Invert24To16(fixed16_t val);
+fixed16_t Invert24To16_C(fixed16_t val);
 int GreatestCommonDivisor (int i1, int i2);
 
 void AngleVectors (vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
-int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct mplane_s *plane);
+int BoxOnPlaneSide_C (vec3_t emins, vec3_t emaxs, struct mplane_s *plane);
 float	anglemod(float a);
 
 
@@ -86,4 +86,4 @@ float	anglemod(float a);
 		)									\
 	)										\
 	:										\
-		BoxOnPlaneSide( (emins), (emaxs), (p)))
+		BoxOnPlaneSide_T( (emins), (emaxs), (p)))

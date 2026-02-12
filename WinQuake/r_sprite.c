@@ -199,7 +199,7 @@ void R_SetupAndDrawSprite ()
 	for (i=0 ; i<nump ; i++)
 	{
 		VectorSubtract (pv, r_origin, local);
-		TransformVector (local, transformed);
+		TransformVector_T (local, transformed);
 
 		if (transformed[2] < NEAR_CLIP)
 			transformed[2] = NEAR_CLIP;

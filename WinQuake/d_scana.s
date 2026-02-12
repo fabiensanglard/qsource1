@@ -38,8 +38,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //----------------------------------------------------------------------
 
 	.align 4
-.globl C(D_DrawTurbulent8Span)
-C(D_DrawTurbulent8Span):
+.globl C(D_DrawTurbulent8Span_ASM)
+C(D_DrawTurbulent8Span_ASM):
 	pushl	%ebp				// preserve caller's stack frame pointer
 	pushl	%esi				// preserve register variables
 	pushl	%edi

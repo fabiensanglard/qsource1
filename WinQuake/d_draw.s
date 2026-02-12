@@ -88,8 +88,8 @@ LClampHigh5:
 #define pspans	4+16
 
 	.align 4
-.globl C(D_DrawSpans8)
-C(D_DrawSpans8):
+.globl C(D_DrawSpans8_ASM)
+C(D_DrawSpans8_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables
@@ -787,8 +787,8 @@ LClampNeg:
 
 #define pzspans	4+16
 
-.globl C(D_DrawZSpans)
-C(D_DrawZSpans):
+.globl C(D_DrawZSpans_ASM)
+C(D_DrawZSpans_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables

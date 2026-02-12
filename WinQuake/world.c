@@ -42,7 +42,7 @@ typedef struct
 } moveclip_t;
 
 
-int SV_HullPointContents (hull_t *hull, int num, vec3_t p);
+int SV_HullPointContents_C (hull_t *hull, int num, vec3_t p);
 
 /*
 ===============================================================================
@@ -480,15 +480,15 @@ POINT TESTING IN HULLS
 ===============================================================================
 */
 
-#if	!id386
+
 
 /*
 ==================
-SV_HullPointContents
+SV_HullPointContents_C
 
 ==================
 */
-int SV_HullPointContents (hull_t *hull, int num, vec3_t p)
+int SV_HullPointContents_C (hull_t *hull, int num, vec3_t p)
 {
 	float		d;
 	dclipnode_t	*node;
@@ -497,7 +497,7 @@ int SV_HullPointContents (hull_t *hull, int num, vec3_t p)
 	while (num >= 0)
 	{
 		if (num < hull->firstclipnode || num > hull->lastclipnode)
-			Sys_Error ("SV_HullPointContents: bad node number");
+			Sys_Error ("SV_HullPointContents_C: bad node number");
 	
 		node = hull->clipnodes + num;
 		plane = hull->planes + node->planenum;
@@ -515,7 +515,6 @@ int SV_HullPointContents (hull_t *hull, int num, vec3_t p)
 	return num;
 }
 
-#endif	// !id386
 
 
 /*
@@ -528,7 +527,7 @@ int SV_PointContents (vec3_t p)
 {
 	int		cont;
 
-	cont = SV_HullPointContents (&sv.worldmodel->hulls[0], 0, p);
+	cont = SV_HullPointContents_T (&sv.worldmodel->hulls[0], 0, p);
 	if (cont <= CONTENTS_CURRENT_0 && cont >= CONTENTS_CURRENT_DOWN)
 		cont = CONTENTS_WATER;
 	return cont;
@@ -536,7 +535,7 @@ int SV_PointContents (vec3_t p)
 
 int SV_TruePointContents (vec3_t p)
 {
-	return SV_HullPointContents (&sv.worldmodel->hulls[0], 0, p);
+	return SV_HullPointContents_T (&sv.worldmodel->hulls[0], 0, p);
 }
 
 //===========================================================================
@@ -658,7 +657,7 @@ qboolean SV_RecursiveHullCheck (hull_t *hull, int num, float p1f, float p2f, vec
 		return false;
 
 #ifdef PARANOID
-	if (SV_HullPointContents (sv_hullmodel, mid, node->children[side])
+	if (SV_HullPointContents_T (sv_hullmodel, mid, node->children[side])
 	== CONTENTS_SOLID)
 	{
 		Con_Printf ("mid PointInHullSolid\n");
@@ -666,7 +665,7 @@ qboolean SV_RecursiveHullCheck (hull_t *hull, int num, float p1f, float p2f, vec
 	}
 #endif
 	
-	if (SV_HullPointContents (hull, node->children[side^1], mid)
+	if (SV_HullPointContents_T (hull, node->children[side^1], mid)
 	!= CONTENTS_SOLID)
 // go past the node
 		return SV_RecursiveHullCheck (hull, node->children[side^1], midf, p2f, mid, p2, trace);
@@ -688,7 +687,7 @@ qboolean SV_RecursiveHullCheck (hull_t *hull, int num, float p1f, float p2f, vec
 		trace->plane.dist = -plane->dist;
 	}
 
-	while (SV_HullPointContents (hull, hull->firstclipnode, mid)
+	while (SV_HullPointContents_T (hull, hull->firstclipnode, mid)
 	== CONTENTS_SOLID)
 	{ // shouldn't really happen, but does occasionally
 		frac -= 0.1;

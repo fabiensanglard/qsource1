@@ -65,8 +65,8 @@ lzistepx:		.long	0
 
 #define skinwidth	4+0
 
-.globl C(D_PolysetCalcGradients)
-C(D_PolysetCalcGradients):
+.globl C(D_PolysetCalcGradients_ASM)
+C(D_PolysetCalcGradients_ASM):
 
 //	p00_minus_p20 = r_p0[0] - r_p2[0];
 //	p01_minus_p21 = r_p0[1] - r_p2[1];
@@ -479,8 +479,8 @@ C(D_PolysetCalcGradients):
 #define lp2	8+16
 #define lp3	12+16
 
-.globl C(D_PolysetRecursiveTriangle)
-C(D_PolysetRecursiveTriangle):
+.globl C(D_PolysetRecursiveTriangle_ASM)
+C(D_PolysetRecursiveTriangle_ASM):
 	pushl	%ebp				// preserve caller stack frame pointer
 	pushl	%esi				// preserve register variables
 	pushl	%edi
@@ -713,18 +713,18 @@ LDraw:
 LNoDraw:
 
 //// recursively continue
-//	D_PolysetRecursiveTriangle (lp3, lp1, new);
+//	D_PolysetRecursiveTriangle_ASM (lp3, lp1, new);
 	pushl	%esp
 	pushl	%ebx
 	pushl	%edi
-	call	C(D_PolysetRecursiveTriangle)
+	call	C(D_PolysetRecursiveTriangle_ASM)
 
-//	D_PolysetRecursiveTriangle (lp3, new, lp2);
+//	D_PolysetRecursiveTriangle_ASM (lp3, new, lp2);
 	movl	%esp,%ebx
 	pushl	%esi
 	pushl	%ebx
 	pushl	%edi
-	call	C(D_PolysetRecursiveTriangle)
+	call	C(D_PolysetRecursiveTriangle_ASM)
 	addl	$24,%esp
 
 LDone:
@@ -745,8 +745,8 @@ LDone:
 .globl C(D_PolysetAff8Start)
 C(D_PolysetAff8Start):
 
-.globl C(D_PolysetDrawSpans8)
-C(D_PolysetDrawSpans8):
+.globl C(D_PolysetDrawSpans8_ASM)
+C(D_PolysetDrawSpans8_ASM):
 	pushl	%esi				// preserve register variables
 	pushl	%ebx
 
@@ -1083,8 +1083,8 @@ C(D_Aff8Patch):
 // triangle drawing code
 //----------------------------------------------------------------------
 
-.globl C(D_PolysetDraw)
-C(D_PolysetDraw):
+.globl C(D_PolysetDraw_ASM)
+C(D_PolysetDraw_ASM):
 
 //	spanpackage_t	spans[DPS_MAXSPANS + 1 +
 //			((CACHE_SIZE - 1) / sizeof(spanpackage_t)) + 1];
@@ -1101,10 +1101,10 @@ C(D_PolysetDraw):
 //	if (r_affinetridesc.drawtype)
 //		D_DrawSubdiv ();
 //	else
-//		D_DrawNonSubdiv ();
+//		D_DrawNonSubdiv_ASM ();
 	movl	C(r_affinetridesc)+atd_drawtype,%eax
 	testl	%eax,%eax
-	jz		C(D_DrawNonSubdiv)
+	jz		C(D_DrawNonSubdiv_ASM)
 
 	pushl	%ebp				// preserve caller stack frame pointer
 
@@ -1187,7 +1187,7 @@ Llooptop:
 
 //		if (ptri[i].facesfront)
 //		{
-//			D_PolysetRecursiveTriangle(index0->v, index1->v, index2->v);
+//			D_PolysetRecursiveTriangle_ASM(index0->v, index1->v, index2->v);
 	movl	mtri_facesfront-16(%ebx,%ebp,),%eax
 	testl	%eax,%eax
 	jz		Lfacesback
@@ -1195,7 +1195,7 @@ Llooptop:
 	pushl	%edx
 	pushl	%esi
 	pushl	%ecx
-	call	C(D_PolysetRecursiveTriangle)
+	call	C(D_PolysetRecursiveTriangle_ASM)
 
 	subl	$16,%ebp
 	jnz		Llooptop
@@ -1240,11 +1240,11 @@ Lp12:
 	addl	%eax,fv_v+8(%edx)
 Lp13:
 
-//			D_PolysetRecursiveTriangle(index0->v, index1->v, index2->v);
+//			D_PolysetRecursiveTriangle_ASM(index0->v, index1->v, index2->v);
 	pushl	%edx
 	pushl	%esi
 	pushl	%ecx
-	call	C(D_PolysetRecursiveTriangle)
+	call	C(D_PolysetRecursiveTriangle_ASM)
 
 //			index0->v[2] = s0;
 //			index1->v[2] = s1;
@@ -1281,8 +1281,8 @@ Ldone2:
 
 #define height	4+16
 
-.globl C(D_PolysetScanLeftEdge)
-C(D_PolysetScanLeftEdge):
+.globl C(D_PolysetScanLeftEdge_ASM)
+C(D_PolysetScanLeftEdge_ASM):
 	pushl	%ebp				// preserve caller stack frame pointer
 	pushl	%esi				// preserve register variables
 	pushl	%edi
@@ -1469,8 +1469,8 @@ LSkip2:
 #define fv			4+8
 #define	numverts	8+8
 
-.globl C(D_PolysetDrawFinalVerts)
-C(D_PolysetDrawFinalVerts):
+.globl C(D_PolysetDrawFinalVerts_ASM)
+C(D_PolysetDrawFinalVerts_ASM):
 	pushl	%ebp				// preserve caller stack frame pointer
 	pushl	%ebx
 
@@ -1560,8 +1560,8 @@ LNextVert:
 // not C-callable because of stack buffer cleanup
 //----------------------------------------------------------------------
 
-.globl C(D_DrawNonSubdiv)
-C(D_DrawNonSubdiv):
+.globl C(D_DrawNonSubdiv_ASM)
+C(D_DrawNonSubdiv_ASM):
 	pushl	%ebp				// preserve caller stack frame pointer
 	movl	C(r_affinetridesc)+atd_numtriangles,%ebp
 	pushl	%ebx

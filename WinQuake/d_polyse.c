@@ -106,23 +106,23 @@ byte	*skintable[MAX_LBM_HEIGHT];
 int		skinwidth;
 byte	*skinstart;
 
-void D_PolysetDrawSpans8 (spanpackage_t *pspanpackage);
-void D_PolysetCalcGradients (int skinwidth);
+void D_PolysetDrawSpans8_C (spanpackage_t *pspanpackage);
+void D_PolysetCalcGradients_C (int skinwidth);
 void D_DrawSubdiv (void);
-void D_DrawNonSubdiv (void);
-void D_PolysetRecursiveTriangle (int *p1, int *p2, int *p3);
+void D_DrawNonSubdiv_C (void);
+void D_PolysetRecursiveTriangle_C (int *p1, int *p2, int *p3);
 void D_PolysetSetEdgeTable (void);
 void D_RasterizeAliasPolySmooth (void);
-void D_PolysetScanLeftEdge (int height);
+void D_PolysetScanLeftEdge_C (int height);
 
-#if	!id386
+
 
 /*
 ================
-D_PolysetDraw
+D_PolysetDraw_C
 ================
 */
-void D_PolysetDraw (void)
+void D_PolysetDraw_C (void)
 {
 	spanpackage_t	spans[DPS_MAXSPANS + 1 +
 			((CACHE_SIZE - 1) / sizeof(spanpackage_t)) + 1];
@@ -137,17 +137,17 @@ void D_PolysetDraw (void)
 	}
 	else
 	{
-		D_DrawNonSubdiv ();
+		D_DrawNonSubdiv_T ();
 	}
 }
 
 
 /*
 ================
-D_PolysetDrawFinalVerts
+D_PolysetDrawFinalVerts_C
 ================
 */
-void D_PolysetDrawFinalVerts (finalvert_t *fv, int numverts)
+void D_PolysetDrawFinalVerts_C (finalvert_t *fv, int numverts)
 {
 	int		i, z;
 	short	*zbuf;
@@ -173,6 +173,7 @@ void D_PolysetDrawFinalVerts (finalvert_t *fv, int numverts)
 		}
 	}
 }
+
 
 
 /*
@@ -209,7 +210,7 @@ void D_DrawSubdiv (void)
 
 		if (ptri[i].facesfront)
 		{
-			D_PolysetRecursiveTriangle(index0->v, index1->v, index2->v);
+			D_PolysetRecursiveTriangle_T(index0->v, index1->v, index2->v);
 		}
 		else
 		{
@@ -226,7 +227,7 @@ void D_DrawSubdiv (void)
 			if (index2->flags & ALIAS_ONSEAM)
 				index2->v[2] += r_affinetridesc.seamfixupX16;
 
-			D_PolysetRecursiveTriangle(index0->v, index1->v, index2->v);
+			D_PolysetRecursiveTriangle_T(index0->v, index1->v, index2->v);
 
 			index0->v[2] = s0;
 			index1->v[2] = s1;
@@ -238,10 +239,10 @@ void D_DrawSubdiv (void)
 
 /*
 ================
-D_DrawNonSubdiv
+D_DrawNonSubdiv_C
 ================
 */
-void D_DrawNonSubdiv (void)
+void D_DrawNonSubdiv_C (void)
 {
 	mtriangle_t		*ptri;
 	finalvert_t		*pfv, *index0, *index1, *index2;
@@ -304,12 +305,13 @@ void D_DrawNonSubdiv (void)
 }
 
 
+
 /*
 ================
-D_PolysetRecursiveTriangle
+D_PolysetRecursiveTriangle_C
 ================
 */
-void D_PolysetRecursiveTriangle (int *lp1, int *lp2, int *lp3)
+void D_PolysetRecursiveTriangle_C (int *lp1, int *lp2, int *lp3)
 {
 	int		*temp;
 	int		d;
@@ -382,11 +384,11 @@ split:
 
 nodraw:
 // recursively continue
-	D_PolysetRecursiveTriangle (lp3, lp1, new);
-	D_PolysetRecursiveTriangle (lp3, new, lp2);
+	D_PolysetRecursiveTriangle_T (lp3, lp1, new);
+	D_PolysetRecursiveTriangle_T (lp3, new, lp2);
 }
 
-#endif	// !id386
+
 
 
 /*
@@ -411,14 +413,14 @@ void D_PolysetUpdateTables (void)
 }
 
 
-#if	!id386
+
 
 /*
 ===================
-D_PolysetScanLeftEdge
+D_PolysetScanLeftEdge_C
 ====================
 */
-void D_PolysetScanLeftEdge (int height)
+void D_PolysetScanLeftEdge_C (int height)
 {
 
 	do
@@ -479,7 +481,6 @@ void D_PolysetScanLeftEdge (int height)
 	} while (--height);
 }
 
-#endif	// !id386
 
 
 /*
@@ -521,14 +522,14 @@ void D_PolysetSetUpForLineScan(fixed8_t startvertu, fixed8_t startvertv,
 }
 
 
-#if	!id386
+
 
 /*
 ================
-D_PolysetCalcGradients
+D_PolysetCalcGradients_C
 ================
 */
-void D_PolysetCalcGradients (int skinwidth)
+void D_PolysetCalcGradients_C (int skinwidth)
 {
 	float	xstepdenominv, ystepdenominv, t0, t1;
 	float	p01_minus_p21, p11_minus_p21, p00_minus_p20, p10_minus_p20;
@@ -584,7 +585,6 @@ void D_PolysetCalcGradients (int skinwidth)
 	a_ststepxwhole = skinwidth * (r_tstepx >> 16) + (r_sstepx >> 16);
 }
 
-#endif	// !id386
 
 
 #if 0
@@ -604,14 +604,12 @@ void InitGel (byte *palette)
 #endif
 
 
-#if	!id386
-
 /*
 ================
-D_PolysetDrawSpans8
+D_PolysetDrawSpans8_C
 ================
 */
-void D_PolysetDrawSpans8 (spanpackage_t *pspanpackage)
+void D_PolysetDrawSpans8_C (spanpackage_t *pspanpackage)
 {
 	int		lcount;
 	byte	*lpdest;
@@ -674,7 +672,7 @@ void D_PolysetDrawSpans8 (spanpackage_t *pspanpackage)
 		pspanpackage++;
 	} while (pspanpackage->count != -999999);
 }
-#endif	// !id386
+
 
 
 /*
@@ -738,7 +736,7 @@ void D_RasterizeAliasPolySmooth (void)
 // set the s, t, and light gradients, which are consistent across the triangle
 // because being a triangle, things are affine
 //
-	D_PolysetCalcGradients (r_affinetridesc.skinwidth);
+	D_PolysetCalcGradients_T (r_affinetridesc.skinwidth);
 
 //
 // rasterize the polygon
@@ -837,7 +835,7 @@ void D_RasterizeAliasPolySmooth (void)
 		d_lightextrastep = d_lightbasestep + working_lstepx;
 		d_ziextrastep = d_zibasestep + r_zistepx;
 
-		D_PolysetScanLeftEdge (initialleftheight);
+		D_PolysetScanLeftEdge_T (initialleftheight);
 	}
 
 //
@@ -930,7 +928,7 @@ void D_RasterizeAliasPolySmooth (void)
 			d_lightextrastep = d_lightbasestep + working_lstepx;
 			d_ziextrastep = d_zibasestep + r_zistepx;
 
-			D_PolysetScanLeftEdge (height);
+			D_PolysetScanLeftEdge_T (height);
 		}
 	}
 
@@ -944,7 +942,7 @@ void D_RasterizeAliasPolySmooth (void)
 	d_countextrastep = ubasestep + 1;
 	originalcount = a_spans[initialrightheight].count;
 	a_spans[initialrightheight].count = -999999; // mark end of the spanpackages
-	D_PolysetDrawSpans8 (a_spans);
+	D_PolysetDrawSpans8_T (a_spans);
 
 // scan out the bottom part of the right edge, if it exists
 	if (pedgetable->numrightedges == 2)
@@ -968,7 +966,7 @@ void D_RasterizeAliasPolySmooth (void)
 		d_countextrastep = ubasestep + 1;
 		a_spans[initialrightheight + height].count = -999999;
 											// mark end of the spanpackages
-		D_PolysetDrawSpans8 (pstart);
+		D_PolysetDrawSpans8_T (pstart);
 	}
 }
 
@@ -1103,8 +1101,8 @@ split:
 	D_PolysetRecursiveDrawLine (new, lp3);
 
 // recursively continue
-	D_PolysetRecursiveTriangle (lp1, new, lp3);
-	D_PolysetRecursiveTriangle (new, lp2, lp3);
+	D_PolysetRecursiveTriangle_T (lp1, new, lp3);
+	D_PolysetRecursiveTriangle_T (new, lp2, lp3);
 }
 
 #endif

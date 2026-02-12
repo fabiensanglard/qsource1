@@ -39,8 +39,8 @@ Ltemp1:	.long	0
 #define pfv1		8+8
 #define out			8+12
 
-.globl C(R_Alias_clip_bottom)
-C(R_Alias_clip_bottom):
+.globl C(R_Alias_clip_bottom_ASM)
+C(R_Alias_clip_bottom_ASM):
 	pushl	%esi
 	pushl	%edi
 
@@ -155,8 +155,8 @@ LDo3Forward:
 	ret
 
 
-.globl C(R_Alias_clip_top)
-C(R_Alias_clip_top):
+.globl C(R_Alias_clip_top_ASM)
+C(R_Alias_clip_top_ASM):
 	pushl	%esi
 	pushl	%edi
 
@@ -168,8 +168,8 @@ C(R_Alias_clip_top):
 
 
 
-.globl C(R_Alias_clip_right)
-C(R_Alias_clip_right):
+.globl C(R_Alias_clip_right_ASM)
+C(R_Alias_clip_right_ASM):
 	pushl	%esi
 	pushl	%edi
 
@@ -200,8 +200,8 @@ LDoForward2:
 	jmp		LDoForward
 
 
-.globl C(R_Alias_clip_left)
-C(R_Alias_clip_left):
+.globl C(R_Alias_clip_left_ASM)
+C(R_Alias_clip_left_ASM):
 	pushl	%esi
 	pushl	%edi
 

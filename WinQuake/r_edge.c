@@ -65,7 +65,8 @@ edge_t	edge_sentinel;
 
 float	fv;
 
-void R_GenerateSpans (void);
+void R_GenerateSpans_C (void);
+void R_GenerateSpans_ASM (void);
 void R_GenerateSpansBackward (void);
 
 void R_LeadingEdge (edge_t *edge);
@@ -145,7 +146,7 @@ void R_BeginEdgeFrame (void)
 	}
 	else
 	{
-		pdrawfunc = R_GenerateSpans;
+		pdrawfunc = R_GenerateSpans_T;
 		surfaces[1].key = 0x7FFFFFFF;
 		r_currentkey = 0;
 	}
@@ -158,11 +159,11 @@ void R_BeginEdgeFrame (void)
 }
 
 
-#if	!id386
+
 
 /*
 ==============
-R_InsertNewEdges
+R_InsertNewEdges_C
 
 Adds the edges in the linked list edgestoadd, adding them to the edges in the
 linked list edgelist.  edgestoadd is assumed to be sorted on u, and non-empty (this is actually newedges[v]).  edgelist is assumed to be sorted on u, with a
@@ -170,7 +171,7 @@ sentinel at the end (actually, this is the active edge table starting at
 edge_head.next).
 ==============
 */
-void R_InsertNewEdges (edge_t *edgestoadd, edge_t *edgelist)
+void R_InsertNewEdges_C (edge_t *edgestoadd, edge_t *edgelist)
 {
 	edge_t	*next_edge;
 
@@ -201,17 +202,17 @@ addedge:
 	} while ((edgestoadd = next_edge) != NULL);
 }
 
-#endif	// !id386
+
 	
 
-#if	!id386
+
 
 /*
 ==============
-R_RemoveEdges
+R_RemoveEdges_C
 ==============
 */
-void R_RemoveEdges (edge_t *pedge)
+void R_RemoveEdges_C (edge_t *pedge)
 {
 
 	do
@@ -221,17 +222,17 @@ void R_RemoveEdges (edge_t *pedge)
 	} while ((pedge = pedge->nextremove) != NULL);
 }
 
-#endif	// !id386
 
 
-#if	!id386
+
+
 
 /*
 ==============
-R_StepActiveU
+R_StepActiveU_C
 ==============
 */
-void R_StepActiveU (edge_t *pedge)
+void R_StepActiveU_C (edge_t *pedge)
 {
 	edge_t		*pnext_edge, *pwedge;
 
@@ -291,7 +292,6 @@ pushback:
 	}
 }
 
-#endif	// !id386
 
 
 /*
@@ -450,7 +450,6 @@ void R_TrailingEdge (surf_t *surf, edge_t *edge)
 }
 
 
-#if	!id386
 
 /*
 ==============
@@ -582,10 +581,10 @@ gotposition:
 
 /*
 ==============
-R_GenerateSpans
+R_GenerateSpans_C
 ==============
 */
-void R_GenerateSpans (void)
+void R_GenerateSpans_C (void)
 {
 	edge_t			*edge;
 	surf_t			*surf;
@@ -616,7 +615,6 @@ void R_GenerateSpans (void)
 	R_CleanupSpan ();
 }
 
-#endif	// !id386
 
 
 /*
@@ -715,7 +713,7 @@ void R_ScanEdges (void)
 
 		if (newedges[iv])
 		{
-			R_InsertNewEdges (newedges[iv], edge_head.next);
+			R_InsertNewEdges_T (newedges[iv], edge_head.next);
 		}
 
 		(*pdrawfunc) ();
@@ -745,10 +743,10 @@ void R_ScanEdges (void)
 		}
 
 		if (removeedges[iv])
-			R_RemoveEdges (removeedges[iv]);
+			R_RemoveEdges_T (removeedges[iv]);
 
 		if (edge_head.next != &edge_tail)
-			R_StepActiveU (edge_head.next);
+			R_StepActiveU_T (edge_head.next);
 	}
 
 // do the last scan (no need to step or sort or remove on the last scan)
@@ -760,7 +758,7 @@ void R_ScanEdges (void)
 	surfaces[1].spanstate = 1;
 
 	if (newedges[iv])
-		R_InsertNewEdges (newedges[iv], edge_head.next);
+		R_InsertNewEdges_T (newedges[iv], edge_head.next);
 
 	(*pdrawfunc) ();
 

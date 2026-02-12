@@ -72,7 +72,7 @@ float	r_avertexnormals[NUMVERTEXNORMALS][3] = {
 #include "anorms.h"
 };
 
-void R_AliasTransformAndProjectFinalVerts (finalvert_t *fv,
+void R_AliasTransformAndProjectFinalVerts_C (finalvert_t *fv,
 	stvert_t *pstverts);
 void R_AliasSetUpTransform (int trivial_accept);
 void R_AliasTransformVector (vec3_t in, vec3_t out);
@@ -319,7 +319,7 @@ void R_AliasPreparePoints (void)
 		{	// totally unclipped
 			r_affinetridesc.pfinalverts = pfinalverts;
 			r_affinetridesc.ptriangles = ptri;
-			D_PolysetDraw ();
+			D_PolysetDraw_T ();
 		}
 		else		
 		{	// partially clipped
@@ -449,14 +449,14 @@ void R_AliasTransformFinalVert (finalvert_t *fv, auxvert_t *av,
 }
 
 
-#if	!id386
+
 
 /*
 ================
-R_AliasTransformAndProjectFinalVerts
+R_AliasTransformAndProjectFinalVerts_C
 ================
 */
-void R_AliasTransformAndProjectFinalVerts (finalvert_t *fv, stvert_t *pstverts)
+void R_AliasTransformAndProjectFinalVerts_C (finalvert_t *fv, stvert_t *pstverts)
 {
 	int			i, temp;
 	float		lightcos, *plightnormal, zi;
@@ -503,7 +503,6 @@ void R_AliasTransformAndProjectFinalVerts (finalvert_t *fv, stvert_t *pstverts)
 	}
 }
 
-#endif
 
 
 /*
@@ -540,17 +539,17 @@ void R_AliasPrepareUnclippedPoints (void)
 // FIXME: just use pfinalverts directly?
 	fv = pfinalverts;
 
-	R_AliasTransformAndProjectFinalVerts (fv, pstverts);
+	R_AliasTransformAndProjectFinalVerts_T (fv, pstverts);
 
 	if (r_affinetridesc.drawtype)
-		D_PolysetDrawFinalVerts (fv, r_anumverts);
+		D_PolysetDrawFinalVerts_T (fv, r_anumverts);
 
 	r_affinetridesc.pfinalverts = pfinalverts;
 	r_affinetridesc.ptriangles = (mtriangle_t *)
 			((byte *)paliashdr + paliashdr->triangles);
 	r_affinetridesc.numtriangles = pmdl->numtris;
 
-	D_PolysetDraw ();
+	D_PolysetDraw_T ();
 }
 
 /*

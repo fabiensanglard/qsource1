@@ -33,10 +33,10 @@ int		snd_scaletable[32][256];
 int 	*snd_p, snd_linear_count, snd_vol;
 short	*snd_out;
 
-void Snd_WriteLinearBlastStereo16 (void);
+void Snd_WriteLinearBlastStereo16_C (void);
 
-#if	!id386
-void Snd_WriteLinearBlastStereo16 (void)
+
+void Snd_WriteLinearBlastStereo16_C (void)
 {
 	int		i;
 	int		val;
@@ -60,7 +60,7 @@ void Snd_WriteLinearBlastStereo16 (void)
 			snd_out[i+1] = val;
 	}
 }
-#endif
+
 
 void S_TransferStereo16 (int endtime)
 {
@@ -124,7 +124,7 @@ void S_TransferStereo16 (int endtime)
 		snd_linear_count <<= 1;
 
 	// write a linear blast of samples
-		Snd_WriteLinearBlastStereo16 ();
+		Snd_WriteLinearBlastStereo16_T ();
 
 		snd_p += snd_linear_count;
 		lpaintedtime += (snd_linear_count>>1);
@@ -255,7 +255,7 @@ CHANNEL MIXING
 ===============================================================================
 */
 
-void SND_PaintChannelFrom8 (channel_t *ch, sfxcache_t *sc, int endtime);
+void SND_PaintChannelFrom8_C (channel_t *ch, sfxcache_t *sc, int endtime);
 void SND_PaintChannelFrom16 (channel_t *ch, sfxcache_t *sc, int endtime);
 
 void S_PaintChannels(int endtime)
@@ -300,7 +300,7 @@ void S_PaintChannels(int endtime)
 				if (count > 0)
 				{	
 					if (sc->width == 1)
-						SND_PaintChannelFrom8(ch, sc, count);
+						SND_PaintChannelFrom8_T(ch, sc, count);
 					else
 						SND_PaintChannelFrom16(ch, sc, count);
 	
@@ -341,9 +341,9 @@ void SND_InitScaletable (void)
 }
 
 
-#if	!id386
 
-void SND_PaintChannelFrom8 (channel_t *ch, sfxcache_t *sc, int count)
+
+void SND_PaintChannelFrom8_C (channel_t *ch, sfxcache_t *sc, int count)
 {
 	int 	data;
 	int		*lscale, *rscale;
@@ -369,7 +369,6 @@ void SND_PaintChannelFrom8 (channel_t *ch, sfxcache_t *sc, int count)
 	ch->pos += count;
 }
 
-#endif	// !id386
 
 
 void SND_PaintChannelFrom16 (channel_t *ch, sfxcache_t *sc, int count)

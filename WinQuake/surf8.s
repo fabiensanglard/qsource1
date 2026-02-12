@@ -43,8 +43,8 @@ C(R_Surf8Start):
 //----------------------------------------------------------------------
 
 	.align 4
-.globl C(R_DrawSurfaceBlock8_mip0)
-C(R_DrawSurfaceBlock8_mip0):
+.globl C(R_DrawSurfaceBlock8_mip0_ASM)
+C(R_DrawSurfaceBlock8_mip0_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables
@@ -269,8 +269,8 @@ LSkip_mip0:
 //----------------------------------------------------------------------
 
 	.align 4
-.globl C(R_DrawSurfaceBlock8_mip1)
-C(R_DrawSurfaceBlock8_mip1):
+.globl C(R_DrawSurfaceBlock8_mip1_ASM)
+C(R_DrawSurfaceBlock8_mip1_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables
@@ -439,8 +439,8 @@ LSkip_mip1:
 //----------------------------------------------------------------------
 
 	.align 4
-.globl C(R_DrawSurfaceBlock8_mip2)
-C(R_DrawSurfaceBlock8_mip2):
+.globl C(R_DrawSurfaceBlock8_mip2_ASM)
+C(R_DrawSurfaceBlock8_mip2_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables
@@ -579,8 +579,8 @@ LSkip_mip2:
 //----------------------------------------------------------------------
 
 	.align 4
-.globl C(R_DrawSurfaceBlock8_mip3)
-C(R_DrawSurfaceBlock8_mip3):
+.globl C(R_DrawSurfaceBlock8_mip3_ASM)
+C(R_DrawSurfaceBlock8_mip3_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables

@@ -30,7 +30,7 @@ fixed16_t		r_turb_s, r_turb_t, r_turb_sstep, r_turb_tstep;
 int				*r_turb_turb;
 int				r_turb_spancount;
 
-void D_DrawTurbulent8Span (void);
+void D_DrawTurbulent8Span_C (void);
 
 
 /*
@@ -90,14 +90,14 @@ void D_WarpScreen (void)
 }
 
 
-#if	!id386
+
 
 /*
 =============
-D_DrawTurbulent8Span
+D_DrawTurbulent8Span_C
 =============
 */
-void D_DrawTurbulent8Span (void)
+void D_DrawTurbulent8Span_C (void)
 {
 	int		sturb, tturb;
 
@@ -110,8 +110,6 @@ void D_DrawTurbulent8Span (void)
 		r_turb_t += r_turb_tstep;
 	} while (--r_turb_spancount > 0);
 }
-
-#endif	// !id386
 
 
 /*
@@ -236,7 +234,7 @@ void Turbulent8 (espan_t *pspan)
 			r_turb_s = r_turb_s & ((CYCLE<<16)-1);
 			r_turb_t = r_turb_t & ((CYCLE<<16)-1);
 
-			D_DrawTurbulent8Span ();
+			D_DrawTurbulent8Span_T ();
 
 			r_turb_s = snext;
 			r_turb_t = tnext;
@@ -247,14 +245,13 @@ void Turbulent8 (espan_t *pspan)
 }
 
 
-#if	!id386
 
 /*
 =============
-D_DrawSpans8
+D_DrawSpans8_C
 =============
 */
-void D_DrawSpans8 (espan_t *pspan)
+void D_DrawSpans8_C (espan_t *pspan)
 {
 	int				count, spancount;
 	unsigned char	*pbase, *pdest;
@@ -382,17 +379,15 @@ void D_DrawSpans8 (espan_t *pspan)
 	} while ((pspan = pspan->pnext) != NULL);
 }
 
-#endif
 
 
-#if	!id386
 
 /*
 =============
-D_DrawZSpans
+D_DrawZSpans_C
 =============
 */
-void D_DrawZSpans (espan_t *pspan)
+void D_DrawZSpans_C (espan_t *pspan)
 {
 	int				count, doublecount, izistep;
 	int				izi;
@@ -444,6 +439,4 @@ void D_DrawZSpans (espan_t *pspan)
 
 	} while ((pspan = pspan->pnext) != NULL);
 }
-
-#endif
 

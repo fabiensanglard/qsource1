@@ -52,8 +52,8 @@ blockjumptable16:
 C(R_Surf16Start):
 
 	.align 4
-.globl C(R_DrawSurfaceBlock16)
-C(R_DrawSurfaceBlock16):
+.globl C(R_DrawSurfaceBlock16_ASM)
+C(R_DrawSurfaceBlock16_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables

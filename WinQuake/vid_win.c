@@ -344,7 +344,7 @@ int VID_Suspend (MGLDC *dc,m_int flags)
 
 		return MGL_NO_SUSPEND_APP;
 	}
-
+	return MGL_NO_SUSPEND_APP;
 }
 
 

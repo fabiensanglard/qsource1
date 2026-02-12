@@ -132,8 +132,8 @@ void D_CalcGradients (msurface_t *pface)
 
 	mipscale = 1.0 / (float)(1 << miplevel);
 
-	TransformVector (pface->texinfo->vecs[0], p_saxis);
-	TransformVector (pface->texinfo->vecs[1], p_taxis);
+	TransformVector_T (pface->texinfo->vecs[0], p_saxis);
+	TransformVector_T (pface->texinfo->vecs[1], p_taxis);
 
 	t = xscaleinv * mipscale;
 	d_sdivzstepu = p_saxis[0] * t;
@@ -180,7 +180,7 @@ void D_DrawSurfaces (void)
 	vec3_t			local_modelorg;
 
 	currententity = &cl_entities[0];
-	TransformVector (modelorg, transformed_modelorg);
+	TransformVector_T (modelorg, transformed_modelorg);
 	VectorCopy (transformed_modelorg, world_transformed_modelorg);
 
 // TODO: could preset a lot of this at mode set time
@@ -196,7 +196,7 @@ void D_DrawSurfaces (void)
 			d_ziorigin = s->d_ziorigin;
 
 			D_DrawSolidSurface (s, (int)s->data & 0xFF);
-			D_DrawZSpans (s->spans);
+			D_DrawZSpans_T (s->spans);
 		}
 	}
 	else
@@ -220,7 +220,7 @@ void D_DrawSurfaces (void)
 				}
 
 				D_DrawSkyScans8 (s->spans);
-				D_DrawZSpans (s->spans);
+				D_DrawZSpans_T (s->spans);
 			}
 			else if (s->flags & SURF_DRAWBACKGROUND)
 			{
@@ -231,7 +231,7 @@ void D_DrawSurfaces (void)
 				d_ziorigin = -0.9;
 
 				D_DrawSolidSurface (s, (int)r_clearcolor.value & 0xFF);
-				D_DrawZSpans (s->spans);
+				D_DrawZSpans_T (s->spans);
 			}
 			else if (s->flags & SURF_DRAWTURB)
 			{
@@ -250,7 +250,7 @@ void D_DrawSurfaces (void)
 												// R_RotateBmodel ()
 					VectorSubtract (r_origin, currententity->origin,
 							local_modelorg);
-					TransformVector (local_modelorg, transformed_modelorg);
+					TransformVector_T (local_modelorg, transformed_modelorg);
 
 					R_RotateBmodel ();	// FIXME: don't mess with the frustum,
 										// make entity passed in
@@ -258,7 +258,7 @@ void D_DrawSurfaces (void)
 
 				D_CalcGradients (pface);
 				Turbulent8 (s->spans);
-				D_DrawZSpans (s->spans);
+				D_DrawZSpans_T (s->spans);
 
 				if (s->insubmodel)
 				{
@@ -286,7 +286,7 @@ void D_DrawSurfaces (void)
 					currententity = s->entity;	//FIXME: make this passed in to
 												// R_RotateBmodel ()
 					VectorSubtract (r_origin, currententity->origin, local_modelorg);
-					TransformVector (local_modelorg, transformed_modelorg);
+					TransformVector_T (local_modelorg, transformed_modelorg);
 
 					R_RotateBmodel ();	// FIXME: don't mess with the frustum,
 										// make entity passed in
@@ -306,7 +306,7 @@ void D_DrawSurfaces (void)
 
 				(*d_drawspans) (s->spans);
 
-				D_DrawZSpans (s->spans);
+				D_DrawZSpans_T (s->spans);
 
 				if (s->insubmodel)
 				{

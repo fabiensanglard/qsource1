@@ -40,8 +40,8 @@ Lcoords:	.long	0, 0, 0
 #define fv			12+4
 #define pstverts	12+8
 
-.globl C(R_AliasTransformAndProjectFinalVerts)
-C(R_AliasTransformAndProjectFinalVerts):
+.globl C(R_AliasTransformAndProjectFinalVerts_ASM)
+C(R_AliasTransformAndProjectFinalVerts_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables

@@ -56,8 +56,8 @@ Lzi0:			.long		0
 #define clip	12+12
 
 	.align 4
-.globl C(R_ClipEdge)
-C(R_ClipEdge):
+.globl C(R_ClipEdge_ASM)
+C(R_ClipEdge_ASM):
 	pushl	%esi				// preserve register variables
 	pushl	%edi
 	pushl	%ebx

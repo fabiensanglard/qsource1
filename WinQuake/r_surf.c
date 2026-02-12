@@ -37,16 +37,16 @@ int				r_lightwidth;
 int				r_numhblocks, r_numvblocks;
 unsigned char	*r_source, *r_sourcemax;
 
-void R_DrawSurfaceBlock8_mip0 (void);
-void R_DrawSurfaceBlock8_mip1 (void);
-void R_DrawSurfaceBlock8_mip2 (void);
-void R_DrawSurfaceBlock8_mip3 (void);
+void R_DrawSurfaceBlock8_mip0_T (void);
+void R_DrawSurfaceBlock8_mip1_T (void);
+void R_DrawSurfaceBlock8_mip2_T (void);
+void R_DrawSurfaceBlock8_mip3_T (void);
 
 static void	(*surfmiptable[4])(void) = {
-	R_DrawSurfaceBlock8_mip0,
-	R_DrawSurfaceBlock8_mip1,
-	R_DrawSurfaceBlock8_mip2,
-	R_DrawSurfaceBlock8_mip3
+	R_DrawSurfaceBlock8_mip0_T,
+	R_DrawSurfaceBlock8_mip1_T,
+	R_DrawSurfaceBlock8_mip2_T,
+	R_DrawSurfaceBlock8_mip3_T
 };
 
 
@@ -289,7 +289,7 @@ void R_DrawSurface (void)
 	}
 	else
 	{
-		pblockdrawer = R_DrawSurfaceBlock16;
+		pblockdrawer = R_DrawSurfaceBlock16_T;
 	// TODO: only needs to be set when there is a display settings change
 		horzblockstep = blocksize << 1;
 	}
@@ -333,14 +333,13 @@ void R_DrawSurface (void)
 
 //=============================================================================
 
-#if	!id386
 
 /*
 ================
 R_DrawSurfaceBlock8_mip0
 ================
 */
-void R_DrawSurfaceBlock8_mip0 (void)
+void R_DrawSurfaceBlock8_mip0_C (void)
 {
 	int				v, i, b, lightstep, lighttemp, light;
 	unsigned char	pix, *psource, *prowdest;
@@ -390,7 +389,7 @@ void R_DrawSurfaceBlock8_mip0 (void)
 R_DrawSurfaceBlock8_mip1
 ================
 */
-void R_DrawSurfaceBlock8_mip1 (void)
+void R_DrawSurfaceBlock8_mip1_C (void)
 {
 	int				v, i, b, lightstep, lighttemp, light;
 	unsigned char	pix, *psource, *prowdest;
@@ -440,7 +439,7 @@ void R_DrawSurfaceBlock8_mip1 (void)
 R_DrawSurfaceBlock8_mip2
 ================
 */
-void R_DrawSurfaceBlock8_mip2 (void)
+void R_DrawSurfaceBlock8_mip2_C (void)
 {
 	int				v, i, b, lightstep, lighttemp, light;
 	unsigned char	pix, *psource, *prowdest;
@@ -490,7 +489,7 @@ void R_DrawSurfaceBlock8_mip2 (void)
 R_DrawSurfaceBlock8_mip3
 ================
 */
-void R_DrawSurfaceBlock8_mip3 (void)
+void R_DrawSurfaceBlock8_mip3_C (void)
 {
 	int				v, i, b, lightstep, lighttemp, light;
 	unsigned char	pix, *psource, *prowdest;
@@ -542,7 +541,7 @@ R_DrawSurfaceBlock16
 FIXME: make this work
 ================
 */
-void R_DrawSurfaceBlock16 (void)
+void R_DrawSurfaceBlock16_C (void)
 {
 	int				k;
 	unsigned char	*psource;
@@ -582,7 +581,6 @@ void R_DrawSurfaceBlock16 (void)
 	prowdestbase = prowdest;
 }
 
-#endif
 
 
 //============================================================================

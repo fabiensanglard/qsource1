@@ -44,8 +44,8 @@ float_1_point_001:		.single	1.001
 .globl C(R_EdgeCodeStart)
 C(R_EdgeCodeStart):
 
-.globl C(R_InsertNewEdges)
-C(R_InsertNewEdges):
+.globl C(R_InsertNewEdges_ASM)
+C(R_InsertNewEdges_ASM):
 	pushl	%edi
 	pushl	%esi				// preserve register variables
 	movl	edgestoadd(%esp),%edx
@@ -110,8 +110,8 @@ LDone:
 
 #define predge	4+4
 
-.globl C(R_RemoveEdges)
-C(R_RemoveEdges):
+.globl C(R_RemoveEdges_ASM)
+C(R_RemoveEdges_ASM):
 	pushl	%ebx
 	movl	predge(%esp),%eax
 
@@ -146,8 +146,8 @@ Lre_done:
 #define pedgelist	4+4		// note odd stack offset because of interleaving
 							// with pushes
 
-.globl C(R_StepActiveU)
-C(R_StepActiveU):
+.globl C(R_StepActiveU_ASM)
+C(R_StepActiveU_ASM):
 	pushl	%edi
 	movl	pedgelist(%esp),%edx
 	pushl	%esi				// preserve register variables
@@ -322,8 +322,8 @@ Lgs_trailing:
 	jmp		TrailingEdge
 
 
-.globl C(R_GenerateSpans)
-C(R_GenerateSpans):
+.globl C(R_GenerateSpans_ASM)
+C(R_GenerateSpans_ASM):
 	pushl	%ebp				// preserve caller's stack frame
 	pushl	%edi
 	pushl	%esi				// preserve register variables

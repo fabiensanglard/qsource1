@@ -45,14 +45,13 @@ void D_StartParticles (void)
 }
 
 
-#if	!id386
 
 /*
 ==============
-D_DrawParticle
+D_DrawParticle_C
 ==============
 */
-void D_DrawParticle (particle_t *pparticle)
+void D_DrawParticle_C (particle_t *pparticle)
 {
 	vec3_t	local, transformed;
 	float	zi;
@@ -202,6 +201,4 @@ void D_DrawParticle (particle_t *pparticle)
 		break;
 	}
 }
-
-#endif	// !id386
 

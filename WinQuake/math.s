@@ -40,8 +40,8 @@ Ljmptab:	.long	Lcase0, Lcase1, Lcase2, Lcase3
 // stack parameter offset
 #define	val	4
 
-.globl C(Invert24To16)
-C(Invert24To16):
+.globl C(Invert24To16_ASM)
+C(Invert24To16_ASM):
 
 	movl	val(%esp),%ecx
 	movl	$0x100,%edx		// 0x10000000000 as dividend
@@ -61,8 +61,8 @@ LOutOfRange:
 #define out	8
 
 	.align 2
-.globl C(TransformVector)
-C(TransformVector):
+.globl C(TransformVector_ASM)
+C(TransformVector_ASM):
 	movl	in(%esp),%eax
 	movl	out(%esp),%edx
 
@@ -109,8 +109,8 @@ C(TransformVector):
 #define P		4+12
 
 	.align 2
-.globl C(BoxOnPlaneSide)
-C(BoxOnPlaneSide):
+.globl C(BoxOnPlaneSide_ASM)
+C(BoxOnPlaneSide_ASM):
 	pushl	%ebx
 
 	movl	P(%esp),%edx
